@@ -98,6 +98,41 @@ function App() {
     }
   }
 
+  async function salvarEdicao() {
+    setEnviando(true)
+    setMensagemFormulario('')
+
+    try {
+      const resposta = await fetch(`${URL_API}/${avisoEmEdicao.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: avisoEmEdicao.id,
+          userId: avisoEmEdicao.userId,
+          title: titulo.trim(),
+          body: texto.trim(),
+        }),
+      })
+      if (!resposta.ok) {
+        throw new Error(`Erro HTTP ${resposta.status}`)
+      }
+      const atualizado = await resposta.json()
+
+      setAvisos((atuais) =>
+        atuais.map((aviso) =>
+          aviso.id === avisoEmEdicao.id ? { ...aviso, ...atualizado } : aviso
+        )
+      )
+      setAvisoEmEdicao(null)
+      limparFormulario()
+    } catch (erroCapturado) {
+      console.error(erroCapturado)
+      setMensagemFormulario('Não foi possível salvar as alterações. Tente novamente.')
+    } finally {
+      setEnviando(false)
+    }
+  }
+
   function aoEnviarFormulario(evento) {
     evento.preventDefault()
 
@@ -107,11 +142,10 @@ function App() {
     }
 
     if (avisoEmEdicao) {
-      // O PUT será implementado no próximo commit.
-      return
+      salvarEdicao()
+    } else {
+      publicarAviso()
     }
-
-    publicarAviso()
   }
 
   const listaVazia = !carregando && !erro && avisos.length === 0

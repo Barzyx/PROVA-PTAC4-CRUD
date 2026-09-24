@@ -9,6 +9,13 @@ function FormularioAviso({
   aoEnviar,
   aoCancelar,
 }) {
+  function textoDoBotao() {
+    if (editando) {
+      return enviando ? 'Salvando...' : 'Salvar'
+    }
+    return enviando ? 'Publicando...' : 'Publicar aviso'
+  }
+
   return (
     <form className="formulario" onSubmit={aoEnviar}>
       <h2>{editando ? 'Editar aviso' : 'Novo aviso'}</h2>
@@ -37,10 +44,10 @@ function FormularioAviso({
 
       <div className="formulario-acoes">
         <button type="submit" disabled={enviando}>
-          {editando ? 'Salvar' : enviando ? 'Publicando...' : 'Publicar aviso'}
+          {textoDoBotao()}
         </button>
         {editando && (
-          <button type="button" onClick={aoCancelar}>
+          <button type="button" onClick={aoCancelar} disabled={enviando}>
             Cancelar
           </button>
         )}
