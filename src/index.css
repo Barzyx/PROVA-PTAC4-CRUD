@@ -1,0 +1,20 @@
+:root {
+    --cor-texto: #0a192f;
+    --cor-fundo: #dce6f0;
+    --cor-neutra: #4a5b70;
+    --cor-superficie: #f5f9fd;
+    --cor-erro: #9b1c1c;
+    --cor-erro-fundo: #fde8e8;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    font-family: system-ui, sans-serif;
+    line-height: 1.5;
+}

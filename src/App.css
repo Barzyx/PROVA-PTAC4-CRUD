@@ -1,61 +1,230 @@
 .app {
-    max-width: 1100px;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 16px;
-    font-family: system-ui, sans-serif;
+    padding: 0 16px 48px;
 }
 
+/* Cabeçalho centralizado */
+.cabecalho {
+    padding: 40px 0 28px;
+    text-align: center;
+}
+
+.cabecalho h1 {
+    margin: 0;
+    font-size: 2.25rem;
+    letter-spacing: -0.02em;
+}
+
+.cabecalho-subtitulo {
+    margin: 6px 0 0;
+    color: var(--cor-neutra);
+}
+
+/* Estrutura principal: formulário em cima, lista embaixo */
 .conteudo {
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 24px;
-    align-items: start;
-}
-
-.formulario {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 32px;
+}
+
+/* Formulário em painel largo */
+.formulario {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 24px;
+    border-radius: 16px;
+    background: var(--cor-superficie);
+    box-shadow: 0 2px 12px rgba(10, 25, 47, 0.08);
+}
+
+.formulario-topo h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.formulario-apoio {
+    margin: 6px 0 0;
+    color: var(--cor-neutra);
+    font-size: 0.9rem;
+}
+
+.formulario-corpo {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.campo label {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.campo input,
+.campo textarea {
+    padding: 10px 12px;
+    border: 1px solid var(--cor-fundo);
+    border-radius: 10px;
+    background: #ffffff;
+    color: var(--cor-texto);
+    font: inherit;
+}
+
+.campo textarea {
+    resize: vertical;
 }
 
 .formulario-acoes {
     display: flex;
+    justify-content: flex-end;
     gap: 8px;
 }
 
 .formulario-mensagem {
     margin: 0;
-    padding: 8px 12px;
-    border-radius: 8px;
-    background: #fde8e8;
-    color: #9b1c1c;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--cor-erro-fundo);
+    color: var(--cor-erro);
 }
 
-.lista {
+/* Botões */
+button {
+    padding: 9px 18px;
+    border: 1px solid var(--cor-texto);
+    border-radius: 999px;
+    background: var(--cor-texto);
+    color: var(--cor-fundo);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+    opacity: 0.85;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--cor-neutra);
+    outline-offset: 2px;
+}
+
+.formulario-acoes button[type='button'],
+.cartao-acoes button {
+    background: transparent;
+    color: var(--cor-texto);
+}
+
+/* Topo da lista */
+.lista-topo {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.titulo-secao {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.contador {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--cor-superficie);
+    color: var(--cor-neutra);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Grade de cartões */
+.lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
 }
 
 .cartao {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    padding: 18px;
+    border-top: 4px solid var(--cor-texto);
+    border-radius: 12px;
+    background: var(--cor-superficie);
+    box-shadow: 0 1px 6px rgba(10, 25, 47, 0.08);
+}
+
+.cartao-meta {
+    display: flex;
+    justify-content: space-between;
+    color: var(--cor-neutra);
+    font-size: 0.75rem;
+}
+
+.cartao-id {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--cor-fundo);
+    font-weight: 600;
+}
+
+.cartao h3 {
+    margin: 12px 0 8px;
+    font-size: 1.05rem;
+    text-transform: capitalize;
+}
+
+.cartao p {
+    margin: 0;
+    color: var(--cor-neutra);
+    white-space: pre-line;
 }
 
 .cartao-acoes {
     display: flex;
     gap: 8px;
-    margin-top: 8px;
+    margin-top: auto;
+    padding-top: 16px;
 }
 
+.cartao-acoes button {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+}
+
+/* Estados */
 .estado {
-    padding: 12px;
-    border-radius: 8px;
-    background: #f1f1f1;
+    margin: 16px 0 0;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: var(--cor-superficie);
+    color: var(--cor-neutra);
+    text-align: center;
 }
 
 .estado-erro {
-    background: #fde8e8;
-    color: #9b1c1c;
+    background: var(--cor-erro-fundo);
+    color: var(--cor-erro);
+}
+
+/* Formulário em duas colunas em telas largas */
+@media (min-width: 801px) {
+    .formulario {
+        grid-template-columns: 240px 1fr;
+        gap: 32px;
+    }
 }

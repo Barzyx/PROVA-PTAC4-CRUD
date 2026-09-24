@@ -58,6 +58,8 @@ function App() {
     setTitulo(aviso.title)
     setTexto(aviso.body)
     setMensagemFormulario('')
+    // O formulário fica no topo da página: leva a pessoa até ele.
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   function cancelarEdicao() {
@@ -84,7 +86,8 @@ function App() {
       }
       const criado = await resposta.json()
 
-
+      // A API simula o salvamento e devolve sempre id 101.
+      // Usamos um id local único para não repetir a key na lista.
       const proximoId = Math.max(0, ...avisos.map((aviso) => aviso.id)) + 1
       const novoAviso = { ...criado, id: proximoId }
 
@@ -141,7 +144,7 @@ function App() {
       cancelarEdicao()
     }
 
-
+    // Remoção otimista: o cartão some da tela antes da resposta da API.
     setAvisos((atuais) => atuais.filter((item) => item.id !== aviso.id))
 
     try {
@@ -154,7 +157,7 @@ function App() {
     } catch (erroCapturado) {
       console.error(erroCapturado)
 
-
+      // Rollback: devolve o aviso à posição em que estava.
       setAvisos((atuais) => {
         const copia = [...atuais]
         copia.splice(posicao, 0, aviso)
@@ -180,14 +183,17 @@ function App() {
   }
 
   const listaVazia = !carregando && !erro && avisos.length === 0
+  const mostrarContador = !carregando && !erro
 
   return (
     <div className="app">
       <header className="cabecalho">
         <h1>Mural de Avisos</h1>
+        <p className="cabecalho-subtitulo">Recados e comunicados da turma</p>
       </header>
+
       <main className="conteudo">
-        <aside className="coluna-formulario">
+        <section className="area-formulario">
           <FormularioAviso
             titulo={titulo}
             texto={texto}
@@ -199,8 +205,18 @@ function App() {
             aoEnviar={aoEnviarFormulario}
             aoCancelar={cancelarEdicao}
           />
-        </aside>
-        <section className="coluna-lista">
+        </section>
+
+        <section className="area-lista">
+          <div className="lista-topo">
+            <h2 className="titulo-secao">Avisos recentes</h2>
+            {mostrarContador && (
+              <span className="contador">
+                {avisos.length} {avisos.length === 1 ? 'aviso' : 'avisos'}
+              </span>
+            )}
+          </div>
+
           {erroExclusao && (
             <p className="estado estado-erro" role="alert">
               {erroExclusao}
