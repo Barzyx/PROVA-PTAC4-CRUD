@@ -10,6 +10,7 @@ function App() {
   const [avisos, setAvisos] = useState([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState(null)
+  const [erroExclusao, setErroExclusao] = useState('')
 
   const [titulo, setTitulo] = useState('')
   const [texto, setTexto] = useState('')
@@ -83,8 +84,7 @@ function App() {
       }
       const criado = await resposta.json()
 
-      // A API simula o salvamento e devolve sempre id 101.
-      // Usamos um id local único para não repetir a key na lista.
+
       const proximoId = Math.max(0, ...avisos.map((aviso) => aviso.id)) + 1
       const novoAviso = { ...criado, id: proximoId }
 
@@ -133,6 +133,37 @@ function App() {
     }
   }
 
+  async function excluirAviso(aviso) {
+    const posicao = avisos.findIndex((item) => item.id === aviso.id)
+
+    setErroExclusao('')
+    if (avisoEmEdicao && avisoEmEdicao.id === aviso.id) {
+      cancelarEdicao()
+    }
+
+
+    setAvisos((atuais) => atuais.filter((item) => item.id !== aviso.id))
+
+    try {
+      const resposta = await fetch(`${URL_API}/${aviso.id}`, {
+        method: 'DELETE',
+      })
+      if (!resposta.ok) {
+        throw new Error(`Erro HTTP ${resposta.status}`)
+      }
+    } catch (erroCapturado) {
+      console.error(erroCapturado)
+
+
+      setAvisos((atuais) => {
+        const copia = [...atuais]
+        copia.splice(posicao, 0, aviso)
+        return copia
+      })
+      setErroExclusao('Não foi possível excluir o aviso. Ele foi mantido no mural.')
+    }
+  }
+
   function aoEnviarFormulario(evento) {
     evento.preventDefault()
 
@@ -170,7 +201,17 @@ function App() {
           />
         </aside>
         <section className="coluna-lista">
-          <ListaAvisos avisos={avisos} aoEditar={iniciarEdicao} />
+          {erroExclusao && (
+            <p className="estado estado-erro" role="alert">
+              {erroExclusao}
+            </p>
+          )}
+
+          <ListaAvisos
+            avisos={avisos}
+            aoEditar={iniciarEdicao}
+            aoExcluir={excluirAviso}
+          />
 
           {carregando && <p className="estado">Carregando avisos...</p>}
 

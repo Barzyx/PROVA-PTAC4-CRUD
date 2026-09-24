@@ -1,4 +1,4 @@
-function CartaoAviso({ aviso, aoEditar }) {
+function CartaoAviso({ aviso, aoEditar, aoExcluir }) {
   return (
     <article className="cartao">
       <h3>{aviso.title}</h3>
@@ -8,7 +8,9 @@ function CartaoAviso({ aviso, aoEditar }) {
         <button type="button" onClick={() => aoEditar(aviso)}>
           Editar
         </button>
-        <button type="button">Excluir</button>
+        <button type="button" onClick={() => aoExcluir(aviso)}>
+          Excluir
+        </button>
       </div>
     </article>
   )
