@@ -3,13 +3,15 @@ function FormularioAviso({
   texto,
   mensagem,
   enviando,
+  editando,
   aoMudarTitulo,
   aoMudarTexto,
   aoEnviar,
+  aoCancelar,
 }) {
   return (
     <form className="formulario" onSubmit={aoEnviar}>
-      <h2>Novo aviso</h2>
+      <h2>{editando ? 'Editar aviso' : 'Novo aviso'}</h2>
 
       <label htmlFor="titulo">Título</label>
       <input
@@ -33,9 +35,16 @@ function FormularioAviso({
         </p>
       )}
 
-      <button type="submit" disabled={enviando}>
-        {enviando ? 'Publicando...' : 'Publicar aviso'}
-      </button>
+      <div className="formulario-acoes">
+        <button type="submit" disabled={enviando}>
+          {editando ? 'Salvar' : enviando ? 'Publicando...' : 'Publicar aviso'}
+        </button>
+        {editando && (
+          <button type="button" onClick={aoCancelar}>
+            Cancelar
+          </button>
+        )}
+      </div>
     </form>
   )
 }

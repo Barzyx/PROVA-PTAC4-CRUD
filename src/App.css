@@ -18,6 +18,11 @@
     gap: 8px;
 }
 
+.formulario-acoes {
+    display: flex;
+    gap: 8px;
+}
+
 .formulario-mensagem {
     margin: 0;
     padding: 8px 12px;

@@ -15,6 +15,7 @@ function App() {
   const [texto, setTexto] = useState('')
   const [mensagemFormulario, setMensagemFormulario] = useState('')
   const [enviando, setEnviando] = useState(false)
+  const [avisoEmEdicao, setAvisoEmEdicao] = useState(null)
 
   useEffect(() => {
     const controlador = new AbortController()
@@ -49,6 +50,18 @@ function App() {
     setTitulo('')
     setTexto('')
     setMensagemFormulario('')
+  }
+
+  function iniciarEdicao(aviso) {
+    setAvisoEmEdicao(aviso)
+    setTitulo(aviso.title)
+    setTexto(aviso.body)
+    setMensagemFormulario('')
+  }
+
+  function cancelarEdicao() {
+    setAvisoEmEdicao(null)
+    limparFormulario()
   }
 
   async function publicarAviso() {
@@ -93,6 +106,11 @@ function App() {
       return
     }
 
+    if (avisoEmEdicao) {
+      // O PUT será implementado no próximo commit.
+      return
+    }
+
     publicarAviso()
   }
 
@@ -110,13 +128,15 @@ function App() {
             texto={texto}
             mensagem={mensagemFormulario}
             enviando={enviando}
+            editando={avisoEmEdicao !== null}
             aoMudarTitulo={setTitulo}
             aoMudarTexto={setTexto}
             aoEnviar={aoEnviarFormulario}
+            aoCancelar={cancelarEdicao}
           />
         </aside>
         <section className="coluna-lista">
-          <ListaAvisos avisos={avisos} />
+          <ListaAvisos avisos={avisos} aoEditar={iniciarEdicao} />
 
           {carregando && <p className="estado">Carregando avisos...</p>}
 

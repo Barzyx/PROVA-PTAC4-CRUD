@@ -1,10 +1,10 @@
 import CartaoAviso from './CartaoAviso'
 
-function ListaAvisos({ avisos }) {
+function ListaAvisos({ avisos, aoEditar }) {
   return (
     <div className="lista">
       {avisos.map((aviso) => (
-        <CartaoAviso key={aviso.id} aviso={aviso} />
+        <CartaoAviso key={aviso.id} aviso={aviso} aoEditar={aoEditar} />
       ))}
     </div>
   )
