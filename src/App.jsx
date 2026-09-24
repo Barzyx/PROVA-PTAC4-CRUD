@@ -7,12 +7,15 @@ const URL_API = 'https://jsonplaceholder.typicode.com/posts'
 
 function App() {
   const [avisos, setAvisos] = useState([])
+  const [carregando, setCarregando] = useState(true)
+  const [erro, setErro] = useState(null)
 
   useEffect(() => {
     const controlador = new AbortController()
 
     async function carregarAvisos() {
       try {
+        setErro(null)
         const resposta = await fetch(`${URL_API}?_limit=15`, {
           signal: controlador.signal,
         })
@@ -21,9 +24,13 @@ function App() {
         }
         const dados = await resposta.json()
         setAvisos(dados)
-      } catch (erro) {
-        if (erro.name === 'AbortError') return
-        console.error(erro)
+      } catch (erroCapturado) {
+        if (erroCapturado.name === 'AbortError') return
+        setErro('Não foi possível conectar à API. Verifique sua internet e recarregue a página.')
+      } finally {
+        if (!controlador.signal.aborted) {
+          setCarregando(false)
+        }
       }
     }
 
@@ -31,6 +38,8 @@ function App() {
 
     return () => controlador.abort()
   }, [])
+
+  const listaVazia = !carregando && !erro && avisos.length === 0
 
   return (
     <div className="app">
@@ -43,6 +52,20 @@ function App() {
         </aside>
         <section className="coluna-lista">
           <ListaAvisos avisos={avisos} />
+
+          {carregando && <p className="estado">Carregando avisos...</p>}
+
+          {erro && (
+            <p className="estado estado-erro" role="alert">
+              {erro}
+            </p>
+          )}
+
+          {listaVazia && (
+            <p className="estado">
+              Nenhum aviso publicado — seja a primeira pessoa a escrever no mural.
+            </p>
+          )}
         </section>
       </main>
     </div>
