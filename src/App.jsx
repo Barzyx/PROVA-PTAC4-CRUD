@@ -1,13 +1,37 @@
+import { useEffect, useState } from 'react'
 import FormularioAviso from './components/FormularioAviso'
 import ListaAvisos from './components/ListaAvisos'
 import './App.css'
 
-const avisosDeTeste = [
-  { id: 1, userId: 1, title: 'Prova remarcada', body: 'A prova de sexta foi para segunda.' },
-  { id: 2, userId: 1, title: 'Monitoria', body: 'Monitoria de JS na quarta, às 14h.' },
-]
+const URL_API = 'https://jsonplaceholder.typicode.com/posts'
 
 function App() {
+  const [avisos, setAvisos] = useState([])
+
+  useEffect(() => {
+    const controlador = new AbortController()
+
+    async function carregarAvisos() {
+      try {
+        const resposta = await fetch(`${URL_API}?_limit=15`, {
+          signal: controlador.signal,
+        })
+        if (!resposta.ok) {
+          throw new Error(`Erro HTTP ${resposta.status}`)
+        }
+        const dados = await resposta.json()
+        setAvisos(dados)
+      } catch (erro) {
+        if (erro.name === 'AbortError') return
+        console.error(erro)
+      }
+    }
+
+    carregarAvisos()
+
+    return () => controlador.abort()
+  }, [])
+
   return (
     <div className="app">
       <header className="cabecalho">
@@ -18,7 +42,7 @@ function App() {
           <FormularioAviso />
         </aside>
         <section className="coluna-lista">
-          <ListaAvisos avisos={avisosDeTeste} />
+          <ListaAvisos avisos={avisos} />
         </section>
       </main>
     </div>
