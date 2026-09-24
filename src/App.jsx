@@ -10,6 +10,10 @@ function App() {
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState(null)
 
+  const [titulo, setTitulo] = useState('')
+  const [texto, setTexto] = useState('')
+  const [mensagemFormulario, setMensagemFormulario] = useState('')
+
   useEffect(() => {
     const controlador = new AbortController()
 
@@ -39,6 +43,17 @@ function App() {
     return () => controlador.abort()
   }, [])
 
+  function aoEnviarFormulario(evento) {
+    evento.preventDefault()
+
+    if (titulo.trim() === '' || texto.trim() === '') {
+      setMensagemFormulario('Preencha o título e o texto antes de publicar.')
+      return
+    }
+
+    setMensagemFormulario('')
+  }
+
   const listaVazia = !carregando && !erro && avisos.length === 0
 
   return (
@@ -48,7 +63,14 @@ function App() {
       </header>
       <main className="conteudo">
         <aside className="coluna-formulario">
-          <FormularioAviso />
+          <FormularioAviso
+            titulo={titulo}
+            texto={texto}
+            mensagem={mensagemFormulario}
+            aoMudarTitulo={setTitulo}
+            aoMudarTexto={setTexto}
+            aoEnviar={aoEnviarFormulario}
+          />
         </aside>
         <section className="coluna-lista">
           <ListaAvisos avisos={avisos} />
