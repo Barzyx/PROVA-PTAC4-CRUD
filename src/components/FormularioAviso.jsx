@@ -2,6 +2,7 @@ function FormularioAviso({
   titulo,
   texto,
   mensagem,
+  enviando,
   aoMudarTitulo,
   aoMudarTexto,
   aoEnviar,
@@ -32,7 +33,9 @@ function FormularioAviso({
         </p>
       )}
 
-      <button type="submit">Publicar aviso</button>
+      <button type="submit" disabled={enviando}>
+        {enviando ? 'Publicando...' : 'Publicar aviso'}
+      </button>
     </form>
   )
 }
